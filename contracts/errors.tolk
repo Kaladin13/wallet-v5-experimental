@@ -19,4 +19,7 @@ enum Errors {
     NewKeySignatureIsInvalid = 149
     OnlyOwnerCanChangeKey = 150
     PublicKeyWasAlreadyChanged = 151
+    PrevDataHashMismatch = 152
+    LowCodeVersion = 153
+    ConfigCodeCellEmpty = 154
 }

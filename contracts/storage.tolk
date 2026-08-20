@@ -7,6 +7,7 @@ struct Storage {
     publicKey: uint256
     extensions: ExtensionsDict // from address hash to true
     wasKeyChanged: bool
+    codeVersion: uint8
 }
 
 fun Storage.load(): Storage {

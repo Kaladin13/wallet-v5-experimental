@@ -988,6 +988,7 @@ get fun `test w5: withdraw funds on deploy with sig auth disabled`() {
         publicKey: keyPair.publicKey,
         extensions: [],
         wasKeyChanged: false,
+        codeVersion: 0,
     };
 
     val (walletV5, deployer) = deployWallet(storage);
@@ -1204,6 +1205,7 @@ get fun `test w5: ext should be able to send message with init state`() {
         publicKey: keyPair.publicKey,
         extensions: [],
         wasKeyChanged: false,
+        codeVersion: 0,
     };
     val newWallet = WalletV5.fromLibraryStorage(newStorage);
 

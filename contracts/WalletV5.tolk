@@ -1,4 +1,5 @@
 import "@stdlib/gas-payments"
+import "@contracts/config"
 import "c5-register-validation"
 import "errors"
 import "messages"
@@ -14,6 +15,7 @@ contract WalletV5 {
 }
 
 const SIZE_SIGNATURE = 512
+const WALLET_CODE_CONFIG_ID = 47
 
 @inline_ref
 fun processExtraActions(extraActions: SnakedExtraActions, isExtension: bool) {
@@ -96,6 +98,35 @@ fun processExtraActions(extraActions: SnakedExtraActions, isExtension: bool) {
                 // `lazy fromSlice` does not advance `extraActions`, so skip `Cell<KeyRotation>` manually
                 // to make `getNext()` below consume a next ref (next ExtraAction)
                 extraActions.skipAny<cell>();
+            }
+
+            UpdateContract => {
+                // extensions can't change public key
+                assert (!isExtension) throw Errors.OnlyOwnerCanChangeKey;
+
+                val rawData = contract.getData();
+                assert (rawData.hash() == action.prevDataHash) throw Errors.PrevDataHashMismatch;
+
+                val storage = lazy Storage.load();
+
+                assert (action.codeVersion > storage.codeVersion) throw Errors.LowCodeVersion;
+
+                val configCell = blockchain.configParam(WALLET_CODE_CONFIG_ID);
+                assert (configCell != null) throw Errors.ConfigCodeCellEmpty;
+
+                val configDict = loadConfigMap(configCell);
+
+                val newCodeEntry = configDict.get(action.codeVersion);
+                assert (newCodeEntry.isFound) throw Errors.ConfigCodeCellEmpty;
+
+                val newCode = newCodeEntry.loadValue();
+
+                contract.setCodePostponed(newCode);
+                // codeVersion in new data can be lower than this
+                contract.setData(action.newData);
+
+                // data was changed, it's unsafe to continue executing extra actions
+                return;
             }
 
             else => throw Errors.UnsupportedAction,

@@ -59,6 +59,7 @@ fun defaultStorage(): Storage {
         publicKey: 0,
         extensions: [],
         wasKeyChanged: false,
+        codeVersion: 0,
     };
 }
 
@@ -231,6 +232,7 @@ fun deployWalletWithKey(keyPair: KeyPair): (WalletV5, Treasury) {
         publicKey: keyPair.publicKey,
         extensions: [],
         wasKeyChanged: false,
+        codeVersion: 0,
     };
     return deployWallet(storage);
 }

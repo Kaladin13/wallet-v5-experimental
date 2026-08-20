@@ -44,6 +44,7 @@ fun deployWalletWithSubwallet(keyPair: KeyPair, subwalletId: int): (WalletV5, Tr
         publicKey: keyPair.publicKey,
         extensions: [],
         wasKeyChanged: false,
+        codeVersion: 0,
     });
 }
 

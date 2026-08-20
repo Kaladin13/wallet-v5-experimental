@@ -17,6 +17,12 @@ struct (0x05) ChangeKeyExtraAction {
     rotation: Cell<KeyRotation>
 }
 
+struct (0x06) UpdateContract {
+    prevDataHash: uint256
+    newData: cell
+    codeVersion: uint8
+}
+
 /// A payload signed by a new private key for the "change key" action.
 struct KeyRotationProofPayload {
     private tag: uint96 = 0x4B45595F524F544154494F4E
@@ -35,6 +41,7 @@ type ExtraAction =
     | RemoveExtensionExtraAction
     | SetSignatureAllowedExtraAction
     | ChangeKeyExtraAction
+    | UpdateContract
 
 /// "OutActionList" is what's pushed to c5.
 type OutActionsCell = cell

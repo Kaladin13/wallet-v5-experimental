@@ -100,6 +100,7 @@ fun deployW5BenchFixture(): W5BenchFixture {
         publicKey: keyPair.publicKey,
         extensions: [],
         wasKeyChanged: false,
+        codeVersion: 0,
     };
     val wallet = WalletV5.fromStorage(storage);
 
